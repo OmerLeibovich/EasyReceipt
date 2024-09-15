@@ -226,9 +226,9 @@ def add_product():
         return jsonify({'error': str(e)}), 500
 
 # Route to get receipts based on username
-@app.route('/get_receipts', methods=['POST'])
+@app.route('/get_receipts', methods=['GET'])
 def get_receipts():
-    username = request.json.get('username')
+    username = request.args.get('username')
     print(f"Received username: {username}")
 
     if not username:
