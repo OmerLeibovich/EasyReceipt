@@ -245,7 +245,7 @@ def get_receipts():
         for r in receipts
     ]
     print(receipts_list)
-
+    
     return jsonify({'receipts': receipts_list}), 200
 
 # Run the Flask app
