@@ -19,18 +19,15 @@ export default function ReceiptHistory() {
         // Get the username stored in AsyncStorage
         const user = await AsyncStorage.getItem('user');
         console.log("Username from AsyncStorage:", user);
-        
-        // Make a POST request to the server to get receipts based on the username
-        const response = await fetch('http://192.168.68.108:5000/get_receipts', {
-          method: 'POST',
+                
+        // Make a GET request to the server to get receipts based on the username
+        const response = await fetch(`http://192.168.68.108:5000/get_receipts?username=${user}`, {
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            username: user 
-          }),
         });
-  
+
         // Parse the server's response
         const data = await response.json();
         console.log("Data received from server:", data);  // Log the received data to check the server response
@@ -44,15 +41,15 @@ export default function ReceiptHistory() {
         } else {
           console.error('Error fetching receipts:', data.error);
         }
-      } catch (error) {
-        console.error('Error:', error);
-      } finally {
-        console.log("Loading state set to false");
-        // Once data fetching is done, set loading to false
-        setLoading(false);
+        } catch (error) {
+          console.error('Error:', error);
+        } finally {
+          console.log("Loading state set to false");
+          // Once data fetching is done, set loading to false
+          setLoading(false);
+        }
       }
-    };
-  
+
     // Call the fetchReceipts function when the component mounts
     fetchReceipts();
   }, []);
