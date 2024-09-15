@@ -46,10 +46,10 @@ def get_user_data():
     return jsonify(result)
 
 # Route to check user credentials
-@app.route('/check_user', methods=['POST'])
+@app.route('/check_user', methods=['GET'])
 def check_user():
-    username = request.json['username']
-    password = request.json['password']
+    username = request.args.get('username')
+    password = request.args.get('password')
 
     user = User.query.filter_by(username=username).first()
 
