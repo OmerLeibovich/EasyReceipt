@@ -14,42 +14,40 @@ function LoginPage() {
   const LoginCheck = async () => {
     try {
       console.log('Login data:', { username: UserName, password: Password });
-  
-      // Sending a POST request to check user credentials
-      const response = await fetch('http://192.168.68.108:5000/check_user', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({  
-          username: UserName,
-          password: Password,
-        }),
-      });
-  
-      const data = await response.json();
-      console.log('Response data:', data);
-      console.log('Type of data:', typeof data);  // Log the type of data received
-  
-      // Handling different responses based on the backend's response
-      if (data == "2") {
-        console.log('Login successful.');
-        // Store session information in AsyncStorage
-        await AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
-        await AsyncStorage.setItem('user', UserName);  // Store the username for session tracking
-        console.log('Navigating to Scan...');
-        // Navigate to the "Scan" page with the username as a parameter
-        navigation.navigate("Scan", {
-          user: UserName
+        // Construct the URL with query parameters
+        const url = `http://192.168.68.108:5000/check_user?username=${UserName}&password=${Password}`;
+      
+        // Sending a GET request to check user credentials
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         });
-      } else if (data == "1") {
-        alert("The password is incorrect");  // Incorrect password
-      } else {
-        alert("The username and password are incorrect");  // Incorrect username and password
+      
+        const data = await response.json();
+        console.log('Response data:', data);
+        console.log('Type of data:', typeof data);  // Log the type of data received
+      
+        // Handling different responses based on the backend's response
+        if (data == "2") {
+          console.log('Login successful.');
+          // Store session information in AsyncStorage
+          await AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
+          await AsyncStorage.setItem('user', UserName);  // Store the username for session tracking
+          console.log('Navigating to Scan...');
+          // Navigate to the "Scan" page with the username as a parameter
+          navigation.navigate("Scan", {
+            user: UserName
+          });
+        } else if (data == "1") {
+          alert("The password is incorrect");  // Incorrect password
+        } else {
+          alert("The username and password are incorrect");  // Incorrect username and password
+        }
+      } catch (error) {
+        console.error('Error:', error);  // Log any errors that occur during the request
       }
-    } catch (error) {
-      console.error('Error:', error);  // Log any errors that occur during the request
-    }
   };
   
 
